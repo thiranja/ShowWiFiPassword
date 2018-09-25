@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView=(ListView)findViewById(R.id.list);
+        listView= findViewById(R.id.list);
 
         // Extracting the wifi supplicant file and getting it as a String
         WifiFileExtractor extractor = new WifiFileExtractor();

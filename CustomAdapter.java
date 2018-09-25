@@ -8,12 +8,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnClickListener{
@@ -68,9 +65,9 @@ public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnCl
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
-            viewHolder.txtSsid = (TextView) convertView.findViewById(R.id.ssid);
-            viewHolder.txtType = (TextView) convertView.findViewById(R.id.type);
-            viewHolder.txtPsk = (TextView) convertView.findViewById(R.id.psk);
+            viewHolder.txtSsid = convertView.findViewById(R.id.ssid);
+            viewHolder.txtType = convertView.findViewById(R.id.type);
+            viewHolder.txtPsk = convertView.findViewById(R.id.psk);
 
             result=convertView;
 
