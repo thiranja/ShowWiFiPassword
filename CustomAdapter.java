@@ -66,7 +66,6 @@ public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnCl
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_item, parent, false);
             viewHolder.txtSsid = convertView.findViewById(R.id.ssid);
-            viewHolder.txtType = convertView.findViewById(R.id.type);
             viewHolder.txtPsk = convertView.findViewById(R.id.psk);
 
             result=convertView;
@@ -82,7 +81,6 @@ public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnCl
         lastPosition = position;
 
         viewHolder.txtSsid.setText(dataModel.getSsid());
-        viewHolder.txtType.setText(dataModel.getType());
         viewHolder.txtPsk.setText(dataModel.getPsk());
 
         // Return the completed view to render on screen

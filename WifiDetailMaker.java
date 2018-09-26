@@ -1,7 +1,5 @@
 package com.example.thiranja.showwifipassword;
 
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class WifiDetailMaker {
@@ -19,6 +17,7 @@ public class WifiDetailMaker {
         while (i != fileChar.length){
             if (fileChar[i] == '{'){
                 dataModel = new WifiDetail();
+                dataModel.setPsk("None or Other Security Method");
             }else if(fileChar[i] == '}'){
                 data.add(dataModel);
                 dataModel = new WifiDetail();
@@ -31,34 +30,28 @@ public class WifiDetailMaker {
                         sb.append(fileChar[i]);
                         i++;
                     }
+                    if (sb.length() != 0 && sb.charAt(0) == '\"'){
+                        sb.deleteCharAt(0);
+                    }
+                    if (sb.length() != 0 && sb.charAt(sb.length()-1) == '\"'){
+                        sb.deleteCharAt(sb.length()-1);
+                    }
                     dataModel.setSsid(sb.toString());
                     sb.delete(0,sb.length());
-                }else if (sb.toString().equals("psk=") || sb.toString().equals("wep_key0")){
+                }else if (sb.toString().equals("psk=") || sb.toString().equals("wep_key0=") || sb.toString().equals("password=")){
                     sb.delete(0,sb.length());
                     i++;
                     while(fileChar[i] != '\n'){
                         sb.append(fileChar[i]);
                         i++;
+                    }
+                    if (sb.length() != 0 && sb.charAt(0) == '\"'){
+                        sb.deleteCharAt(0);
+                    }
+                    if (sb.length() != 0 && sb.charAt(sb.length()-1) == '\"'){
+                        sb.deleteCharAt(sb.length()-1);
                     }
                     dataModel.setPsk(sb.toString());
-                    sb.delete(0,sb.length());
-                }else if (sb.toString().equals("key_mgmt=")){
-                    sb.delete(0,sb.length());
-                    i++;
-                    while(fileChar[i] != '\n'){
-                        sb.append(fileChar[i]);
-                        i++;
-                    }
-                    dataModel.setType(sb.toString());
-                    sb.delete(0,sb.length());
-                }else if (sb.toString().equals("priority=")){
-                    sb.delete(0,sb.length());
-                    i++;
-                    while(fileChar[i] != '\n'){
-                        sb.append(fileChar[i]);
-                        i++;
-                    }
-                    dataModel.setPriority(sb.toString());
                     sb.delete(0,sb.length());
                 }
                 if (fileChar[i] == '\n' || fileChar[i] == ' ' || fileChar[i] == '\t'){

@@ -1,5 +1,7 @@
 package com.example.thiranja.showwifipassword;
 
+import android.os.Build;
+
 import java.util.List;
 
 import eu.chainfire.libsuperuser.Shell;
@@ -8,6 +10,7 @@ public class WifiFileExtractor {
 
     private boolean suEh;
     List<String> supplicant;
+    private int sdk_int = Build.VERSION.SDK_INT;
 
     public String returnInString(){
         String file = "";
@@ -15,7 +18,11 @@ public class WifiFileExtractor {
         suEh = Shell.SU.available();
         if (suEh){
             // Getting the values as a String list
-            supplicant = Shell.SU.run("cat /data/misc/wifi/wpa_supplicant.conf");
+            if (sdk_int >= Build.VERSION_CODES.O){
+                supplicant = Shell.SU.run("cat /data/misc/wifi/WifiConfigStore.xml");
+            }else {
+                supplicant = Shell.SU.run("cat /data/misc/wifi/wpa_supplicant.conf");
+            }
             // Making the string list a single string
             StringBuilder lineAdder = new StringBuilder();
             if (supplicant != null){
