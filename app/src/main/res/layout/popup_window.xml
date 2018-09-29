@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:background="@color/colorAccent">
+
+    <TextView android:id="@+id/sharetv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Share Network"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <RelativeLayout android:id="@+id/top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sharetv"
+        android:gravity="center_horizontal">
+
+        <TextView android:id="@+id/stxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="SSID :"/>
+
+        <TextView android:id="@+id/pop_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/stxt"
+            android:text="Sample"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout android:id="@+id/middle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:gravity="center_horizontal">
+
+        <TextView android:id="@+id/ptxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" PSK :" />
+
+        <TextView android:id="@+id/pop_psk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ptxt"
+            android:text="Sample" />
+
+    </RelativeLayout>
+
+    <RelativeLayout android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/middle"
+        android:gravity="center_horizontal">
+
+        <Button android:id="@+id/copybtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy" />
+
+        <Button android:id="@+id/sharebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/copybtn"
+            android:text="Share" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
