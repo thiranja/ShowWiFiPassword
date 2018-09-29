@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 public class WifiDetailMaker {
     private char[] fileChar;
+    private ArrayList<WifiDetail> data;
 
-    public WifiDetailMaker(String fileStr) {
+    public WifiDetailMaker(String fileStr, ArrayList<WifiDetail> data) {
+        this.data = data;
         this.fileChar = fileStr.toCharArray();
     }
 
-    public ArrayList<WifiDetail> makeWifiDetailObjects(){
-        ArrayList<WifiDetail> data = new ArrayList<>();
+    public void makeWifiDetailObjects(){
         StringBuilder sb = new StringBuilder();
         WifiDetail dataModel = new WifiDetail();
         int i = 0;
@@ -60,7 +61,6 @@ public class WifiDetailMaker {
             }
             i++;
         }
-        return data;
     }
 
 

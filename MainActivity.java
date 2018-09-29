@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +22,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
@@ -39,24 +39,24 @@ public class MainActivity extends AppCompatActivity{
     ListView listView;
     private static CustomAdapter adapter;
 
-    private ShareActionProvider mShareActionProvider;
-
     private LinearLayout conNet;
     private boolean conNetAvailable = false;
 
     private TextView conSSID;
     private TextView conPSK;
     private String conSSIDStr;
+    private String conPSKStr = "Searching";
 
     private AdView bottomBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // Initializing the mobile ads sdk in the app
-        MobileAds.initialize(this,"ca-app-pub-3940256099942544~3347511713");
+        MobileAds.initialize(this,"ca-app-pub-3824216403455651~2159606475");
 
         listView= findViewById(R.id.list);
 
@@ -64,27 +64,15 @@ public class MainActivity extends AppCompatActivity{
         conNet = findViewById(R.id.conected_network_layout);
         conSSID = findViewById(R.id.cur_ssid);
         conPSK = findViewById(R.id.cur_psk);
-        conSSIDStr = null;
+        conSSIDStr = "Waw";
 
-        // Extracting the wifi supplicant file and getting it as a String
-        WifiFileExtractor extractor = new WifiFileExtractor();
-        final String fileStr = extractor.returnInString();
-
-        // Extracting relavant components from wifi supplicant data and making the
-        // wifi detail object arraylist
         data = new ArrayList<>();
-        if (sdk_int >= Build.VERSION_CODES.O){
-            WifiDetailMakerForO makerForO = new WifiDetailMakerForO(fileStr);
-            data = makerForO.makeWifiDetailObjects();
-        }else {
-            WifiDetailMaker maker = new WifiDetailMaker(fileStr);
-            data = maker.makeWifiDetailObjects();
-        }
-
         // resourcing the custom adapter
         adapter= new CustomAdapter(data,getApplicationContext());
-
         listView.setAdapter(adapter);
+
+        // Executing the wifi data fetching tasks in a background thread
+        new WifiDataFetcher().execute();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -154,7 +142,29 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+
     }
+
+    public WifiDetail getCurWifiDetail(String ssid){
+        WifiDetail detail = null;
+        boolean found = false;
+        if (!data.isEmpty()){
+            for (WifiDetail dataModel:data){
+                if (dataModel.getSsid().equals(ssid)){
+                    detail = dataModel;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (!found){
+            detail = new WifiDetail();
+            detail.setSsid(conSSIDStr);
+            detail.setPsk(conPSKStr);
+        }
+        return detail;
+    }
+
 
     @Override
     protected void onPause() {
@@ -269,20 +279,53 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public WifiDetail getCurWifiDetail(String ssid){
-        WifiDetail detail = null;
-        if (data != null){
-            for (WifiDetail dataModel:data){
-                if (dataModel.getSsid().equals(ssid)){
-                    detail = dataModel;
-                    break;
-                }
+    // Inner class for making the wifi object arraylist in a background thread
+    private class WifiDataFetcher extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Extracting the wifi supplicant file and getting it as a String
+            WifiFileExtractor extractor = new WifiFileExtractor();
+            final String fileStr = extractor.returnInString();
+
+            if (fileStr.length() == 0){
+                conPSKStr = "No Root Permission";
             }
-        }else{
-            detail = new WifiDetail();
-            detail.setSsid(conSSIDStr);
-            detail.setPsk("No Clue");
+
+            // Extracting relavant components from wifi supplicant data and making the
+            // wifi detail object arraylist
+
+            if (sdk_int >= Build.VERSION_CODES.O){
+                WifiDetailMakerForO makerForO = new WifiDetailMakerForO(fileStr, data);
+                makerForO.makeWifiDetailObjects();
+            }else {
+                WifiDetailMaker maker = new WifiDetailMaker(fileStr,data);
+                maker.makeWifiDetailObjects();
+            }
+            return null;
         }
-        return detail;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            adapter.notifyDataSetChanged();
+            checkForConnectionDetails();
+            currentConnectionLayoutInitiator();
+            super.onPostExecute(aVoid);
+        }
     }
+
+    /*public void popUpWindow(View view){
+        //inflating the layout to view
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.popup_window,null);
+
+        // creating the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // close when touch outside
+
+        final PopupWindow popupWindow = new PopupWindow(popupView,width,height,focusable);
+
+        popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+    }*/
 }

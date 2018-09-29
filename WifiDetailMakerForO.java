@@ -5,13 +5,14 @@ import java.util.ArrayList;
 public class WifiDetailMakerForO {
 
     private char[] fileChar;
+    private ArrayList<WifiDetail> data;
 
-    public WifiDetailMakerForO(String fileStr) {
+    public WifiDetailMakerForO(String fileStr,ArrayList<WifiDetail> data) {
+        this.data = data;
         this.fileChar = fileStr.toCharArray();
     }
 
-    public ArrayList<WifiDetail>makeWifiDetailObjects(){
-        ArrayList<WifiDetail> data = new ArrayList<>();
+    public void makeWifiDetailObjects(){
         StringBuilder sb = new StringBuilder();
         WifiDetail dataModel = new WifiDetail();
 
@@ -37,10 +38,16 @@ public class WifiDetailMakerForO {
                 sb.delete(0,sb.length());
                 i += 7;
                 while (fileChar[i] == '\n'){
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     i++;
                 }
                 j = i + 1;
                 while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     if (fileChar[i] != '\n') {
                         sb.append(fileChar[i]);
                     }
@@ -62,10 +69,16 @@ public class WifiDetailMakerForO {
                 sb.delete(0,sb.length());
                 i += 7;
                 while (fileChar[i] == '\n'){
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     i++;
                 }
                 j = i + 1;
                 while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     if (fileChar[i] != '\n') {
                         sb.append(fileChar[i]);
                     }
@@ -88,10 +101,17 @@ public class WifiDetailMakerForO {
                 sb.delete(0,sb.length());
                 i++;
                 while (fileChar[i] == '\n'){
+                    // for safety
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     i++;
                 }
                 j = i + 1;
                 while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
                     if (fileChar[i] != '\n') {
                         sb.append(fileChar[i]);
                     }
@@ -107,12 +127,47 @@ public class WifiDetailMakerForO {
                 dataModel.setPsk(sb.toString());
                 sb.delete(0,sb.length());
             }
+            // Code for Getting password 802.EAP passwords
+            else if (sb.toString().equals("<string name=\"Password\">")){
+                sb.delete(0,sb.length());
+                i ++;
+                while (fileChar[i] == '\n'){
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
+                    i++;
+                }
+                j = i + 1;
+                while ((fileChar[i] != '<' || fileChar[j] != '/')) {
+                    if (i == fileChar.length - 10){
+                        break;
+                    }
+                    if (fileChar[i] != '\n') {
+                        sb.append(fileChar[i]);
+                    }
+                    if (fileChar[i] == '&'){
+                        i += 4;
+                    }
+                    i++;
+                    j = i + 1;
+                    if (fileChar[j] == '&' && fileChar[j+1]=='\n'){
+                        j++;
+                    }
+                }
+
+                if (!data.isEmpty()){
+                    if (data.get(data.size()-1).getPsk() != null){
+                        data.get(data.size()-1).setPsk(sb.toString());
+                    }
+                }
+                sb.delete(0,sb.length());
+
+            }
 
             if (fileChar[i] == '>'){
                 sb.delete(0,sb.length());
             }
             i++;
         }
-        return data;
     }
 }
