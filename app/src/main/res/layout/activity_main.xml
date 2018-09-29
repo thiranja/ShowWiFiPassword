@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<layout xmlns:android="http://schemas.android.com/apk/res/android">-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,7 +12,7 @@
         android:layout_above="@+id/bottom_banner"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
-        tools:ignore="RtlCompat">
+        tools:ignore="UnknownId">
 
         <!--Current network layout-->
         <LinearLayout android:id="@+id/conected_network_layout"
@@ -41,7 +42,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/twotone_network_wifi_black_36dp"/>
+                    android:src="@drawable/ic_wifi_blue"/>
 
                 <TextView
                     android:id="@+id/cur_ssidTXT"
@@ -111,8 +112,6 @@
 
     </LinearLayout>
 
-
-
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/bottom_banner"
@@ -121,7 +120,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+        ads:adUnitId="ca-app-pub-3824216403455651/9602433484">
 
     </com.google.android.gms.ads.AdView>
 
