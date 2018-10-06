@@ -6,4 +6,8 @@
         android:title="Search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="collapseActionView|always" />
+
+    <item android:id="@+id/share_app"
+        android:title="Share App"
+        app:showAsAction="never" />
 </menu>

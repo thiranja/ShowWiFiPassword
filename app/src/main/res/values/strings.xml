@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">Show WiFi Password</string>
+    <string name="app_url">https://play.google.com/store/apps/details?id=com.myapp.thiranja.showwifipassword</string>
+    <string name="app_share_subject">Take a look at \"Show WiFi Password\"</string>
+    <string name="share_method">Choose sharing method</string>
+    <string name="share_wifi_sub">WiFi Access Delivery</string>
 
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="rate_dialog_title">Rate this app</string>
+    <string name="rate_dialog_message">If you think this app is useful, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks for your support!</string>
+    <string name="rate_dialog_ok">Rate It Now</string>
+    <string name="rate_dialog_cancel">Remind Me Later</string>
+    <string name="rate_dialog_no">No, Thanks</string>
+
+    <string name="no_root_header">Root Permissions Needed</string>
+    <string name="no_root_details"><![CDATA[If the Root permissions dined, Please revoke as this app needs Root Permissions to read your WiFi Password If your device is not Rooted and you wish to Root Try searching google for How to Root <Your Phone Model>]]></string>
+    <string name="root_note_header">*PLEASE NOTE*</string>
+    <string name="root_note_details">Trying to Root without proper Knowledge can finish with bricking your device. So make sure you know what you are doing before trying to Root your device</string>
+
 </resources>
