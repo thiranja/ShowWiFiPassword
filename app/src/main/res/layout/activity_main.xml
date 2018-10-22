@@ -111,7 +111,9 @@
         </LinearLayout>
 
         <!--layout Shown for non rooted users -->
-        <LinearLayout android:id="@+id/not_root_layout"
+        <ScrollView android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout android:id="@+id/not_root_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8sp"
@@ -150,7 +152,103 @@
                 android:gravity="center"
                 android:text="@string/root_note_details" />
 
+            <Button
+                android:id="@+id/no_root_mode_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Oh Use No Root Mode"/>
+
+            <TextView
+                android:id="@+id/no_root_mode_help_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/FailWhite"
+                android:gravity="center"
+                android:text="What is no Root Mode?"/>
+
+                <!--No root mode help Layout-->
+                <LinearLayout
+                    android:id="@+id/no_root_mode_help_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="#E5E7E9"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10sp"
+                                android:layout_marginBottom="10sp"
+                                android:text="@string/no_root_mode_header"
+                                android:textColor="@color/colorAccent"
+                                android:textSize="18sp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/no_root_mode_details" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:text="@string/no_root_mode_how_to_get_uname_psk_of_router"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:text="admin admin"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="user user"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="security security"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="00000000 00000000"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="root pass"/>
+
+
+                        </LinearLayout>
+
+                    </ScrollView>
+                </LinearLayout>
+
         </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
     <com.google.android.gms.ads.AdView

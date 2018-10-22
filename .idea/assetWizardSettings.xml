@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/home/thiranja/Downloads/android-studio-ide-173.4907809-linux/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/notification/ic_wifi_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/home/thiranja/Downloads/android-studio-ide-173.4907809-linux/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/file/ic_file_download_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_wifi_blue" />
+                                      <entry key="outputName" value="ic_export_to_file_black" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="4153e7" />
+                                      <entry key="themeColor" value="000000" />
                                     </map>
                                   </option>
                                 </PersistentState>

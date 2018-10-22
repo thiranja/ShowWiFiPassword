@@ -12,8 +12,45 @@
     <string name="rate_dialog_no">No, Thanks</string>
 
     <string name="no_root_header">Root Permissions Needed</string>
-    <string name="no_root_details"><![CDATA[If the Root permissions dined, Please revoke as this app needs Root Permissions to read your WiFi Password If your device is not Rooted and you wish to Root Try searching google for How to Root <Your Phone Model>]]></string>
+    <string name="no_root_details"><![CDATA[If the Root permissions denied, Please revoke as this app needs Root Permissions to read your WiFi Password If your device is not Rooted and you wish to Root Try searching google for How to Root <Your Phone Model>]]></string>
     <string name="root_note_header">*PLEASE NOTE*</string>
-    <string name="root_note_details">Trying to Root without proper Knowledge can finish with bricking your device. So make sure you know what you are doing before trying to Root your device</string>
+    <string name="root_note_details">Trying to Root without proper Knowledge has a possibility of finish up with bricking your device. So make sure you know what you are doing before trying to Root your device</string>
+    <string name="munu_item_share_app_title">Share App</string>
+    <string name="no_root_mode_header">What is No root Mode</string>
+    <string name="no_root_mode_details">Even though we can not view saved WiFi passwords without Root permission we can still try to retrieve them from Routers home page. So we are going to find out the Routers home page address and load it for you, Then you have to enter the Username and Password of the router</string>
+    <string name="no_root_mode_how_to_get_uname_psk_of_router">If you can reach to the Router Username and Password for Router Homepage are printed on it. Do not worry if you can,t reach the Router 60% of Routers uses admin as the Username and Password below is a list of most used Router gateway Username and Passwords</string>
+    <string name="no_root_mode_menu_text">No Root Mode</string>
+    <string name="help_munu_text">Help</string>
 
+
+    <string name="help_activity_text"><![CDATA[
+    <h3>Why Root Permissions</h3>
+    <p>In order to retrieve WiFi passwords we need Root access. The android system does not allow to read <b>Password details unless you have Root access</b></p>
+    <br/>
+    <h3>Then What is No Root Mode</h3>
+    <p>Even-though we can not access passwords stored in your device with out Root access, We can still try to find out the WiFi passwords from your Routers home page</p>
+    <p>In Case you forgot the Username and Password try the mostly used Username and Password pairs provided</p>
+    <h3>WiFi Passwords are Invalid</h3>
+    <p><b>Shows a long sequence of random numbers and letters (Hash code) instead of real password.</b>This situation mostly occur on some Samsung devices, As they encrypt WiFi password before saving them and it is almost impossible to decrypt and read</p>
+    <p>To solve this error, Follow the These steps<br/>    Get a root file Explorer from Play Store such as ES-file-explorer<br/>    And go to /system directory<br/>    And open the file build.prop for editing<br/>    And find out the line ro.securestorage.support=true<br/>    Finally change it ro.securestorage.support=false</p>
+    <p>Do not edit anything else on the file, It could brick your device. And editing this line also has a risk of losing your saved WiFi networks data for the first Time.</p>
+    <h3>Contact Developer</h3>
+    <p>Use the email address appeditmobile@gmail.com, to contact us if you need extra support</p>
+     ]]></string>
+
+    <string name="export_to_a_text_file_menu_text">Export to a Text File</string>
+
+    <string name="no_root_activity_password_expandible">Mostly Used Router Username, Passwords</string>
+    <string name="no_root_activity_password_lisr"><![CDATA[
+    <center>
+        <ul>
+          <li>admin admin</li>
+          <li>user user</li>
+          <li>root root</li>
+          <li>root pass</li>
+          <li>security security</li>
+          <li>00000000 00000000</li>
+        </ul>
+    </center>
+    ]]></string>
 </resources>

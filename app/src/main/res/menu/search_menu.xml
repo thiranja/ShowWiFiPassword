@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
     <item android:id="@+id/search"
         android:icon="@drawable/ic_search_white"
         android:title="Search"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|ifRoom" />
 
     <item android:id="@+id/share_app"
-        android:title="Share App"
+        android:icon="@drawable/ic_share_app_black"
+        android:title="@string/munu_item_share_app_title"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/export_file"
+        android:icon="@drawable/ic_export_to_file_black"
+        android:title="@string/export_to_a_text_file_menu_text"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/no_root_mode_munu"
+        android:icon="@drawable/ic_no_root_mode_black"
+        android:title="@string/no_root_mode_menu_text"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/help_menu"
+        android:icon="@drawable/ic_help_black"
+        android:title="@string/help_munu_text"
         app:showAsAction="never" />
 </menu>
