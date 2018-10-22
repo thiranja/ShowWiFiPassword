@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NoRootModeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <WebView
+            android:id="@+id/no_root_webview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </WebView>
+
+        <ScrollView android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView android:id="@+id/password_expand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@color/FailWhite"
+                    android:gravity="center"
+                    android:text="@string/no_root_activity_password_expandible"/>
+                <TextView android:id="@+id/password_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/FailWhite"
+                    android:gravity="center"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/no_root_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="ca-app-pub-3824216403455651/3025880839">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>
