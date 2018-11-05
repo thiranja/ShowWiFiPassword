@@ -41,16 +41,5 @@
     <string name="export_to_a_text_file_menu_text">Export to a Text File</string>
 
     <string name="no_root_activity_password_expandible">Mostly Used Router Username, Passwords</string>
-    <string name="no_root_activity_password_lisr"><![CDATA[
-    <center>
-        <ul>
-          <li>admin admin</li>
-          <li>user user</li>
-          <li>root root</li>
-          <li>root pass</li>
-          <li>security security</li>
-          <li>00000000 00000000</li>
-        </ul>
-    </center>
-    ]]></string>
+
 </resources>

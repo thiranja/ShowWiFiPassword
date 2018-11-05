@@ -32,12 +32,38 @@
                     android:background="@color/FailWhite"
                     android:gravity="center"
                     android:text="@string/no_root_activity_password_expandible"/>
-                <TextView android:id="@+id/password_list"
+
+                <LinearLayout android:id="@+id/password_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/FailWhite"
-                    android:gravity="center"
-                    android:visibility="gone"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="    ♦ admin admin"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    ♦ user user"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    ♦ security security"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    ♦ 00000000 00000000"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    ♦ root pass"/>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
