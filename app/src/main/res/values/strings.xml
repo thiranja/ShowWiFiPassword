@@ -24,17 +24,17 @@
 
 
     <string name="help_activity_text"><![CDATA[
-    <h3>Why Root Permissions</h3>
+    <h3>  • Why Root Permissions</h3>
     <p>In order to retrieve WiFi passwords we need Root access. The android system does not allow to read <b>Password details unless you have Root access</b></p>
     <br/>
-    <h3>Then What is No Root Mode</h3>
+    <h3>  • Then What is No Root Mode</h3>
     <p>Even-though we can not access passwords stored in your device with out Root access, We can still try to find out the WiFi passwords from your Routers home page</p>
     <p>In Case you forgot the Username and Password try the mostly used Username and Password pairs provided</p>
-    <h3>WiFi Passwords are Invalid</h3>
+    <h3>  • WiFi Passwords are Invalid</h3>
     <p><b>Shows a long sequence of random numbers and letters (Hash code) instead of real password.</b>This situation mostly occur on some Samsung devices, As they encrypt WiFi password before saving them and it is almost impossible to decrypt and read</p>
-    <p>To solve this error, Follow the These steps<br/>    Get a root file Explorer from Play Store such as ES-file-explorer<br/>    And go to /system directory<br/>    And open the file build.prop for editing<br/>    And find out the line ro.securestorage.support=true<br/>    Finally change it ro.securestorage.support=false</p>
+    <p>To solve this error, Follow the These steps<br/><br/> ♦ Get a root file Explorer from Play Store such as ES-file-explorer<br/> ♦ And go to /system directory<br/> ♦ And open the file build.prop for editing<br/> ♦ And find out the line ro.securestorage.support=true<br/> ♦ Finally change it ro.securestorage.support=false</p>
     <p>Do not edit anything else on the file, It could brick your device. And editing this line also has a risk of losing your saved WiFi networks data for the first Time.</p>
-    <h3>Contact Developer</h3>
+    <h3>  • Contact Developer</h3>
     <p>Use the email address appeditmobile@gmail.com, to contact us if you need extra support</p>
      ]]></string>
 
