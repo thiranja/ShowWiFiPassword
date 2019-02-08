@@ -1,9 +1,10 @@
-package com.example.thiranja.showwifipassword;
+package com.myapp.thiranja.showwifipassword;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.DhcpInfo;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -20,16 +21,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
+
+import hotchemi.android.rate.AppRate;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -37,10 +46,13 @@ public class MainActivity extends AppCompatActivity{
 
     ArrayList<WifiDetail> data;
     ListView listView;
-    private static CustomAdapter adapter;
+    private CustomAdapter adapter;
 
     private LinearLayout conNet;
-    private boolean conNetAvailable = false;
+    private LinearLayout noRoot;
+    private LinearLayout noRootHelpLayout;
+    private boolean isRooted = false;
+    private boolean conNetAvailable = true;
 
     private TextView conSSID;
     private TextView conPSK;
@@ -62,13 +74,18 @@ public class MainActivity extends AppCompatActivity{
 
         // Connecting the layout with activity
         conNet = findViewById(R.id.conected_network_layout);
+        noRoot = findViewById(R.id.not_root_layout);
         conSSID = findViewById(R.id.cur_ssid);
         conPSK = findViewById(R.id.cur_psk);
-        conSSIDStr = "Waw";
+        conSSIDStr = "Searching";
+
+
 
         data = new ArrayList<>();
-        // resourcing the custom adapter
+
         adapter= new CustomAdapter(data,getApplicationContext());
+
+        // resourcing the custom adapter
         listView.setAdapter(adapter);
 
         // Executing the wifi data fetching tasks in a background thread
@@ -80,23 +97,18 @@ public class MainActivity extends AppCompatActivity{
 
                 WifiDetail dataModel= data.get(position);
 
-                StringBuilder dataMaker = new StringBuilder();
-                dataMaker.append("SSID = ");
-                dataMaker.append(dataModel.getSsid());
-                dataMaker.append('\n');
-
-                dataMaker.append("PSK = ");
-                dataMaker.append(dataModel.getPsk());
-                dataMaker.append('\n');
-
-                String message = dataMaker.toString();
+                String message = "SSID = " +
+                        dataModel.getSsid() +
+                        '\n' +
+                        "PSK = " +
+                        dataModel.getPsk() +
+                        '\n';
 
                 Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                String shareBodyText = message;
-                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "WiFi Access Delivary");
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
-                startActivity(Intent.createChooser(intent, "Choose sharing method"));
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, R.string.share_wifi_sub);
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(intent, getString(R.string.share_method)));
 
             }
         });
@@ -104,23 +116,18 @@ public class MainActivity extends AppCompatActivity{
         conNet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder dataMaker = new StringBuilder();
-                dataMaker.append("SSID = ");
-                dataMaker.append(conSSID.getText().toString());
-                dataMaker.append('\n');
 
-                dataMaker.append("PSK = ");
-                dataMaker.append(conPSK.getText().toString());
-                dataMaker.append('\n');
-
-                String message = dataMaker.toString();
-
+                String message = "SSID = " +
+                        conSSID.getText().toString() +
+                        '\n' +
+                        "PSK = " +
+                        conPSK.getText().toString() +
+                        '\n';
                 Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                String shareBodyText = message;
-                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "WiFi Access Delivary");
-                intent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
-                startActivity(Intent.createChooser(intent, "Choose sharing method"));
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, R.string.share_wifi_sub);
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(intent, getString(R.string.share_method)));
             }
         });
 
@@ -142,7 +149,46 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        // App rate alert box
+        AppRate.with(this)
+                .setInstallDays(3)
+                .setRemindInterval(3)
+                .setLaunchTimes(7)
+                .monitor();
+        AppRate.showRateDialogIfMeetsConditions(this);
 
+        //Making No Root mode Actions
+
+        Button noRootMode = findViewById(R.id.no_root_mode_btn);
+        TextView noRootModeHelp = findViewById(R.id.no_root_mode_help_btn);
+        noRootHelpLayout = findViewById(R.id.no_root_mode_help_layout);
+
+        noRootMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (conNetAvailable){
+                    String gateway = getGateway();
+                    Intent noRootModeActivity = new Intent(MainActivity.this,NoRootModeActivity.class);
+                    noRootModeActivity.putExtra("GATEWAY",gateway);
+                    startActivity(noRootModeActivity);
+                }else{
+                    Toast.makeText(MainActivity.this, "Need to be Connected to the WiFi Network", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        noRootModeHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (noRootHelpLayout.getVisibility() == View.GONE){
+                    noRootHelpLayout.setVisibility(View.VISIBLE);
+                }else{
+                    noRootHelpLayout.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     public WifiDetail getCurWifiDetail(String ssid){
@@ -206,7 +252,7 @@ public class MainActivity extends AppCompatActivity{
                 if (TextUtils.isEmpty(s)){
                     adapter.filter("");
                     listView.clearTextFilter();
-                    if (conNetAvailable) {
+                    if (conNetAvailable && isRooted) {
                         conNet.setVisibility(View.VISIBLE);
                     }
                 }else{
@@ -218,6 +264,59 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
+
+        // Share app funcionality
+        MenuItem shareApp = menu.findItem(R.id.share_app);
+        shareApp.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                String message = getString(R.string.app_url);
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, R.string.app_share_subject);
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+                startActivity(Intent.createChooser(intent, getString(R.string.share_method)));
+                return false;
+            }
+        });
+
+        // No root Mode
+        MenuItem noRootMode = menu.findItem(R.id.no_root_mode_munu);
+        noRootMode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (conNetAvailable){
+                    String gateway = getGateway();
+                    Intent noRootModeActivity = new Intent(MainActivity.this,NoRootModeActivity.class);
+                    noRootModeActivity.putExtra("GATEWAY",gateway);
+                    startActivity(noRootModeActivity);
+                }else{
+                    Toast.makeText(MainActivity.this, "Need to be Connected to the WiFi Network", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
+        // Help pop up funtionality
+        MenuItem help = menu.findItem(R.id.help_menu);
+        help.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Intent helpActivity = new Intent(MainActivity.this,HelpActivity.class);
+                startActivity(helpActivity);
+                return false;
+            }
+        });
+
+        MenuItem writeFile = menu.findItem(R.id.export_file);
+        writeFile.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                exportToFile();
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -237,6 +336,9 @@ public class MainActivity extends AppCompatActivity{
         }else{
             permissionGranted = true;
         }
+        if (wifiManager == null) {
+            throw new AssertionError();
+        }
         if (wifiManager.isWifiEnabled() && permissionGranted) {
             WifiInfo wifiInfo;
 
@@ -244,24 +346,25 @@ public class MainActivity extends AppCompatActivity{
 
             if (wifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
                 conSSIDStr = wifiInfo.getSSID();
-            }
-            if (conSSIDStr != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(conSSIDStr);
-                if (sb.length() > 2) {
-                    if (sb.charAt(0) == '\"') {
-                        sb.deleteCharAt(0);
+                if (conSSIDStr != null) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(conSSIDStr);
+                    if (sb.length() > 2) {
+                        if (sb.charAt(0) == '\"') {
+                            sb.deleteCharAt(0);
+                        }
+                        if (sb.charAt(sb.length() - 1) == '\"') {
+                            sb.deleteCharAt(sb.length() - 1);
+                        }
                     }
-                    if (sb.charAt(sb.length() - 1) == '\"') {
-                        sb.deleteCharAt(sb.length() - 1);
-                    }
+                    conSSIDStr = sb.toString();
+                    conNetAvailable = true;
+                } else {
+                    conNetAvailable = false;
                 }
-                conSSIDStr = sb.toString();
-                conNetAvailable = true;
-            } else {
+            }else{
                 conNetAvailable = false;
             }
-
         }else{
             conNetAvailable = false;
         }
@@ -269,14 +372,84 @@ public class MainActivity extends AppCompatActivity{
 
     public void currentConnectionLayoutInitiator(){
 
-        if (conNetAvailable){
-            WifiDetail curWifi = getCurWifiDetail(conSSIDStr);
-            conSSID.setText(curWifi.getSsid());
-            conPSK.setText(curWifi.getPsk());
-            conNet.setVisibility(View.VISIBLE);
+        if (isRooted) {
+            noRoot.setVisibility(View.GONE);
+            if (conNetAvailable) {
+                WifiDetail curWifi = getCurWifiDetail(conSSIDStr);
+                conSSID.setText(curWifi.getSsid());
+                conPSK.setText(curWifi.getPsk());
+                conNet.setVisibility(View.VISIBLE);
+            }else{
+                conNet.setVisibility(View.GONE);
+            }
         }else{
             conNet.setVisibility(View.GONE);
+            noRoot.setVisibility(View.VISIBLE);
         }
+    }
+
+    public String getGateway(){
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+        int gate = dhcpInfo.gateway;
+        // Convert little-endian to big-endianif needed
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            gate = Integer.reverseBytes(gate);
+        }
+        String gateway = "Unknown";
+        try {
+            gateway = "http://"+InetAddress.getByAddress(BigInteger.valueOf(gate).toByteArray()).getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return gateway;
+    }
+
+    public void exportToFile(){
+        boolean permissionGranted;
+        if (sdk_int >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED){
+
+                permissionGranted = false;
+                //Permission Not Granted
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+            }else{
+                permissionGranted = true;
+            }
+        }else{
+            permissionGranted = true;
+        }
+        if (permissionGranted){
+            if (data.isEmpty()){
+                Toast.makeText(this, "Network List is Empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String content = writableWiFiPasswordStringMaker();
+            FileWriter fileWriter = new FileWriter();
+            boolean wasWritten = fileWriter.WriteToFile("WiFiPasswordList.txt",content);
+            if (wasWritten){
+                Toast.makeText(MainActivity.this, "File Successfully Written", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Saved to Documents", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(MainActivity.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(this, "Permission Denied for Writing Files", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public String writableWiFiPasswordStringMaker(){
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (WifiDetail detail : data){
+            sb.append("Network ");
+            sb.append(++i);
+            sb.append("\n\n");
+            sb.append("SSID : ").append(detail.getSsid()).append("\n");
+            sb.append("PSK  : ").append(detail.getPsk()).append("\n\n");
+        }
+        return sb.toString();
     }
 
     // Inner class for making the wifi object arraylist in a background thread
@@ -290,10 +463,13 @@ public class MainActivity extends AppCompatActivity{
 
             if (fileStr.length() == 0){
                 conPSKStr = "No Root Permission";
+                isRooted = false;
+            }else{
+                isRooted = true;
             }
 
-            // Extracting relavant components from wifi supplicant data and making the
-            // wifi detail object arraylist
+            // Extracting relevant components from wifi supplicant data and making the
+            // wifi detail object array list
 
             if (sdk_int >= Build.VERSION_CODES.O){
                 WifiDetailMakerForO makerForO = new WifiDetailMakerForO(fileStr, data);
@@ -308,6 +484,8 @@ public class MainActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void aVoid) {
             adapter.notifyDataSetChanged();
+            // This method required to add values to the raw data set to enable search
+            adapter.setRawDataSet();
             checkForConnectionDetails();
             currentConnectionLayoutInitiator();
             super.onPostExecute(aVoid);

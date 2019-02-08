@@ -1,24 +1,24 @@
-package com.example.thiranja.showwifipassword;
+package com.myapp.thiranja.showwifipassword;
 
 import java.util.ArrayList;
 
-public class WifiDetailMaker {
+class WifiDetailMaker {
     private char[] fileChar;
     private ArrayList<WifiDetail> data;
 
-    public WifiDetailMaker(String fileStr, ArrayList<WifiDetail> data) {
+    WifiDetailMaker(String fileStr, ArrayList<WifiDetail> data) {
         this.data = data;
         this.fileChar = fileStr.toCharArray();
     }
 
-    public void makeWifiDetailObjects(){
+    void makeWifiDetailObjects(){
         StringBuilder sb = new StringBuilder();
         WifiDetail dataModel = new WifiDetail();
         int i = 0;
         while (i != fileChar.length){
             if (fileChar[i] == '{'){
                 dataModel = new WifiDetail();
-                dataModel.setPsk("None or Other Security Method");
+                dataModel.setPsk("None");
             }else if(fileChar[i] == '}'){
                 data.add(dataModel);
                 dataModel = new WifiDetail();

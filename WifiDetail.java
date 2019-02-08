@@ -1,11 +1,11 @@
-package com.example.thiranja.showwifipassword;
+package com.myapp.thiranja.showwifipassword;
 
 public class WifiDetail {
 
     private String ssid;
     private String psk;
 
-    public WifiDetail(String ssid, String psk, String type, String priority) {
+    public WifiDetail(String ssid, String psk) {
         this.ssid = ssid;
         this.psk = psk;
 

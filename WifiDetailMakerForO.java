@@ -1,18 +1,18 @@
-package com.example.thiranja.showwifipassword;
+package com.myapp.thiranja.showwifipassword;
 
 import java.util.ArrayList;
 
-public class WifiDetailMakerForO {
+class WifiDetailMakerForO {
 
     private char[] fileChar;
     private ArrayList<WifiDetail> data;
 
-    public WifiDetailMakerForO(String fileStr,ArrayList<WifiDetail> data) {
+    WifiDetailMakerForO(String fileStr, ArrayList<WifiDetail> data) {
         this.data = data;
         this.fileChar = fileStr.toCharArray();
     }
 
-    public void makeWifiDetailObjects(){
+    void makeWifiDetailObjects(){
         StringBuilder sb = new StringBuilder();
         WifiDetail dataModel = new WifiDetail();
 
@@ -24,144 +24,147 @@ public class WifiDetailMakerForO {
             if (fileChar[i] != '\n') {
                 sb.append(fileChar[i]);
             }
-            if (sb.toString().equals("<WifiConfiguration>")){
-                dataModel = new WifiDetail();
-                dataModel.setPsk("None or Other Security Method");
+            switch (sb.toString()) {
+                case "<WifiConfiguration>":
+                    dataModel = new WifiDetail();
+                    dataModel.setPsk("None");
 
-            }else if (sb.toString().equals("</WifiConfiguration>")){
-                data.add(dataModel);
-                dataModel = new WifiDetail();
+                    break;
+                case "</WifiConfiguration>":
+                    data.add(dataModel);
+                    dataModel = new WifiDetail();
 
-            }
-            // code for extracting ssid
-            else if (sb.toString().equals("<string name=\"SSID\">")){
-                sb.delete(0,sb.length());
-                i += 7;
-                while (fileChar[i] == '\n'){
-                    if (i == fileChar.length - 10){
-                        break;
+                    break;
+                // code for extracting ssid
+                case "<string name=\"SSID\">":
+                    sb.delete(0, sb.length());
+                    i += 7;
+                    while (fileChar[i] == '\n') {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        i++;
                     }
-                    i++;
-                }
-                j = i + 1;
-                while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
-                    if (i == fileChar.length - 10){
-                        break;
-                    }
-                    if (fileChar[i] != '\n') {
-                        sb.append(fileChar[i]);
-                    }
-                    if (fileChar[i] == '&'){
-                        i += 4;
-                    }
-                    i++;
                     j = i + 1;
-                    if (fileChar[j] == '&' && fileChar[j+1]=='\n'){
-                        j++;
+                    while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        if (fileChar[i] != '\n') {
+                            sb.append(fileChar[i]);
+                        }
+                        if (fileChar[i] == '&') {
+                            i += 4;
+                        }
+                        i++;
+                        j = i + 1;
+                        if (fileChar[j] == '&' && fileChar[j + 1] == '\n') {
+                            j++;
+                        }
                     }
-                }
 
-                dataModel.setSsid(sb.toString());
-                sb.delete(0,sb.length());
-            }
-            //code for extracting wpa passwords
-            else if (sb.toString().equals("<string name=\"PreSharedKey\">")){
-                sb.delete(0,sb.length());
-                i += 7;
-                while (fileChar[i] == '\n'){
-                    if (i == fileChar.length - 10){
-                        break;
+                    dataModel.setSsid(sb.toString());
+                    sb.delete(0, sb.length());
+                    break;
+                //code for extracting wpa passwords
+                case "<string name=\"PreSharedKey\">":
+                    sb.delete(0, sb.length());
+                    i += 7;
+                    while (fileChar[i] == '\n') {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        i++;
                     }
-                    i++;
-                }
-                j = i + 1;
-                while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
-                    if (i == fileChar.length - 10){
-                        break;
-                    }
-                    if (fileChar[i] != '\n') {
-                        sb.append(fileChar[i]);
-                    }
-                    if (fileChar[i] == '&'){
-                        i += 4;
-                    }
-                    i++;
                     j = i + 1;
-                    if (fileChar[j] == '&' && fileChar[j+1]=='\n'){
-                        j++;
+                    while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        if (fileChar[i] != '\n') {
+                            sb.append(fileChar[i]);
+                        }
+                        if (fileChar[i] == '&') {
+                            i += 4;
+                        }
+                        i++;
+                        j = i + 1;
+                        if (fileChar[j] == '&' && fileChar[j + 1] == '\n') {
+                            j++;
+                        }
                     }
-                }
 
-                dataModel.setPsk(sb.toString());
-                sb.delete(0,sb.length());
+                    dataModel.setPsk(sb.toString());
+                    sb.delete(0, sb.length());
 
-            }
-            // Code for extracting wep password
-            else if(sb.toString().equals("<item value=\"&quot;")){
-                sb.delete(0,sb.length());
-                i++;
-                while (fileChar[i] == '\n'){
-                    // for safety
-                    if (i == fileChar.length - 10){
-                        break;
-                    }
+                    break;
+                // Code for extracting wep password
+                case "<item value=\"&quot;":
+                    sb.delete(0, sb.length());
                     i++;
-                }
-                j = i + 1;
-                while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
-                    if (i == fileChar.length - 10){
-                        break;
+                    while (fileChar[i] == '\n') {
+                        // for safety
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        i++;
                     }
-                    if (fileChar[i] != '\n') {
-                        sb.append(fileChar[i]);
-                    }
-                    if (fileChar[i] == '&'){
-                        i += 4;
-                    }
-                    i++;
                     j = i + 1;
-                    if (fileChar[j] == '&' && fileChar[j+1]=='\n'){
-                        j++;
+                    while ((fileChar[i] != '&' || fileChar[j] != 'q')) {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        if (fileChar[i] != '\n') {
+                            sb.append(fileChar[i]);
+                        }
+                        if (fileChar[i] == '&') {
+                            i += 4;
+                        }
+                        i++;
+                        j = i + 1;
+                        if (fileChar[j] == '&' && fileChar[j + 1] == '\n') {
+                            j++;
+                        }
                     }
-                }
-                dataModel.setPsk(sb.toString());
-                sb.delete(0,sb.length());
-            }
-            // Code for Getting password 802.EAP passwords
-            else if (sb.toString().equals("<string name=\"Password\">")){
-                sb.delete(0,sb.length());
-                i ++;
-                while (fileChar[i] == '\n'){
-                    if (i == fileChar.length - 10){
-                        break;
-                    }
+                    dataModel.setPsk(sb.toString());
+                    sb.delete(0, sb.length());
+                    break;
+                // Code for Getting password 802.EAP passwords
+                case "<string name=\"Password\">":
+                    sb.delete(0, sb.length());
                     i++;
-                }
-                j = i + 1;
-                while ((fileChar[i] != '<' || fileChar[j] != '/')) {
-                    if (i == fileChar.length - 10){
-                        break;
+                    while (fileChar[i] == '\n') {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        i++;
                     }
-                    if (fileChar[i] != '\n') {
-                        sb.append(fileChar[i]);
-                    }
-                    if (fileChar[i] == '&'){
-                        i += 4;
-                    }
-                    i++;
                     j = i + 1;
-                    if (fileChar[j] == '&' && fileChar[j+1]=='\n'){
-                        j++;
+                    while ((fileChar[i] != '<' || fileChar[j] != '/')) {
+                        if (i == fileChar.length - 10) {
+                            break;
+                        }
+                        if (fileChar[i] != '\n') {
+                            sb.append(fileChar[i]);
+                        }
+                        if (fileChar[i] == '&') {
+                            i += 4;
+                        }
+                        i++;
+                        j = i + 1;
+                        if (fileChar[j] == '&' && fileChar[j + 1] == '\n') {
+                            j++;
+                        }
                     }
-                }
 
-                if (!data.isEmpty()){
-                    if (data.get(data.size()-1).getPsk() != null){
-                        data.get(data.size()-1).setPsk(sb.toString());
+                    if (!data.isEmpty()) {
+                        if (data.get(data.size() - 1).getPsk() != null) {
+                            data.get(data.size() - 1).setPsk(sb.toString());
+                        }
                     }
-                }
-                sb.delete(0,sb.length());
+                    sb.delete(0, sb.length());
 
+                    break;
             }
 
             if (fileChar[i] == '>'){

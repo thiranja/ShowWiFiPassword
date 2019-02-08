@@ -1,7 +1,8 @@
-package com.example.thiranja.showwifipassword;
+package com.myapp.thiranja.showwifipassword;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,44 +14,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnClickListener{
+public class CustomAdapter extends ArrayAdapter<WifiDetail>{
 
     private ArrayList<WifiDetail> dataSet;
     private ArrayList<WifiDetail> rawDataSet = new ArrayList<>();
-    Context mContext;
+    private Context mContext;
 
-    // View lookup cache
-    private static class ViewHolder {
-        TextView txtSsid;
-        TextView txtType;
-        TextView txtPsk;
-    }
-
-    public CustomAdapter(ArrayList<WifiDetail> data, Context context) {
+    CustomAdapter(ArrayList<WifiDetail> data, Context context) {
         super(context, R.layout.row_item, data);
         this.dataSet = data;
         this.rawDataSet.addAll(data);
         this.mContext=context;
     }
 
-    @Override
-    public void onClick(View v) {
-
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        WifiDetail dataModel=(WifiDetail) object;
-
-        /*switch (v.getId())
-        {
-            case R.id.item_info:
-                Snackbar.make(v, "Priority " +dataModel.getPriority(), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
-        }*/
-    }
-
-    private int lastPosition = -1;
-
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -87,7 +64,9 @@ public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnCl
         return convertView;
     }
 
-    public void filter(String charText){
+    private int lastPosition = -1;
+
+    void filter(String charText){
         charText = charText.toLowerCase(Locale.getDefault());
         dataSet.clear();
         if (charText.length() == 0){
@@ -100,6 +79,17 @@ public class CustomAdapter extends ArrayAdapter<WifiDetail> implements View.OnCl
             }
         }
         notifyDataSetChanged();
+    }
+
+    void setRawDataSet(){
+        this.rawDataSet.clear();
+        this.rawDataSet.addAll(dataSet);
+    }
+
+    // View lookup cache
+    static class ViewHolder {
+        TextView txtSsid;
+        TextView txtPsk;
     }
 }
 
