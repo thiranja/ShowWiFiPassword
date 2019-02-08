@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".HelpActivity">
 
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/help_bottom_banner"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/help_tv"
@@ -16,4 +20,16 @@
             android:layout_margin="5dp" />
     </ScrollView>
 
-</android.support.constraint.ConstraintLayout>
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/help_bottom_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3824216403455651/1336815368">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>
